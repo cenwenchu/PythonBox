@@ -63,12 +63,24 @@ class RestHttpHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         desturl = url[url.index("?")+1:]    
         params = desturl.split(" ")[0].split("&")
         
+        state = None
+        
         for p in params:
             if p.startswith("code="):
                 authcode = p[5:]
+            if p.startswith("state="):
+                state = p[6:]
         
-        desturl = "grant_type=authorization_code&code=" + authcode + \
-            "&redirect_uri=http://www.mashupshow.com/showcode&client_secret=e5b6de2da468af71f530337d2851c944&client_id=12131536"
+        if (state):
+            if (state == "sina"):
+                desturl = "grant_type=authorization_code&code=" + authcode + \
+                    "&redirect_uri=http://www.mashupshow.com/showcode&client_secret=3a69bb60ed46d0ceab5f0457657ac0f9&client_id=845619194"
+            if (state == "taobao"):
+                desturl = "grant_type=authorization_code&code=" + authcode + \
+                    "&redirect_uri=http://www.mashupshow.com/showcode&client_secret=e5b6de2da468af71f530337d2851c944&client_id=12131536"
+        else:
+            desturl = "grant_type=authorization_code&code=" + authcode + \
+                "&redirect_uri=http://www.mashupshow.com/showcode&client_secret=e5b6de2da468af71f530337d2851c944&client_id=12131536"
         
         params = desturl.split("&")
         paraDict = dict()
@@ -80,8 +92,13 @@ class RestHttpHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         
         print params
         
-        conn = httplib.HTTPSConnection("oauth.taobao.com")
-        conn.request("POST","/token?"+params, params, dict(self.headers))
+        if (state and state == "sina"):
+            conn = httplib.HTTPSConnection("api.weibo.com")
+            conn.request("POST","/oauth2/access_token?"+params, params, dict(self.headers))
+        else:
+            conn = httplib.HTTPSConnection("oauth.taobao.com")
+            conn.request("POST","/token?"+params, params, dict(self.headers))
+            
         resp = conn.getresponse()
             
         self.send_response(resp.status)
