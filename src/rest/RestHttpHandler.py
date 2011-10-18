@@ -9,7 +9,7 @@ from RestEngine import RestEngine
 
 class RestHttpHandler(BaseHTTPServer.BaseHTTPRequestHandler):
     
-    conf = "/Users/apple/Documents/workspace/PythonBox/src.test/rest_def.xml"
+    conf = "rest_def.xml"
     restEngine = RestEngine(conf)
     
     def do_GET(self):
