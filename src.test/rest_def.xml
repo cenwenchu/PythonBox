@@ -1,0 +1,28 @@
+<rest_def>
+	<api_mapping host="rest.api.taobao.com" >
+		<rule paramName="timestamp" header="timestamp" />
+		<rule paramName="app_key" header="app_key" />
+		<rule paramName="sign" header="sign" />
+		<rule paramName="v" uriIndex="1" />
+		<rule paramName="method" uriIndex="2" mappingClass="MappingHandler.APINameMappingHandler" />
+		<rule paramName="format" uriIndex="2" mappingClass="MappingHandler.FormatMappingHandler"/>
+	</api_mapping>
+	
+	<api_mapping host="*" desthost="http://gw.api.taobao.com/router/rest">
+		<rule paramName="timestamp" header="timestamp" />
+		<rule paramName="app_key" header="app_key" />
+		<rule paramName="sign" header="sign" />
+		<rule paramName="v" uriIndex="1" />
+		<rule paramName="method" uriIndex="2" mappingClass="MappingHandler.APINameMappingHandler" />
+		<rule paramName="format" uriIndex="2" mappingClass="MappingHandler.FormatMappingHandler"/>
+	</api_mapping>
+
+	<!-- api_mapping host="*" desthost="http://10.232.127.144:8080/top/router/rest">
+		<rule paramName="timestamp" header="timestamp" />
+		<rule paramName="app_key" header="app_key" />
+		<rule paramName="sign" header="sign" />
+		<rule paramName="v" uriIndex="1" />
+		<rule paramName="method" uriIndex="2" mappingClass="MappingHandler.APINameMappingHandler" />
+		<rule paramName="format" uriIndex="2" mappingClass="MappingHandler.FormatMappingHandler"/>
+	</api_mapping -->
+</rest_def>
