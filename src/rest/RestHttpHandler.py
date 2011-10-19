@@ -6,11 +6,13 @@ Created on 2011-9-29
 
 import BaseHTTPServer,httplib,urllib,datetime,md5,urllib2,cgi,copy
 from RestEngine import RestEngine
+from TQLEngine import TQLEngine
 
 class RestHttpHandler(BaseHTTPServer.BaseHTTPRequestHandler):
     
     conf = "rest_def.xml"
     restEngine = RestEngine(conf)
+    tqlEngine = TQLEngine()
     
     def do_GET(self):
         
@@ -20,7 +22,11 @@ class RestHttpHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         if (self.requestline.find("/getcode") > 0):
             self.auth(self.requestline)  
         else:
-            url = RestHttpHandler.restEngine.process(self.requestline, self.command,self.headers)
+            if(self.requestline.find("/tql") > 0):
+                url = RestHttpHandler.tqlEngine.process(self.requestline, self.command, self.headers)
+            else:
+                url = RestHttpHandler.restEngine.process(self.requestline, self.command,self.headers)
+                
             self.do_proxy(url)   
         
             
@@ -31,7 +37,15 @@ class RestHttpHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         if (self.requestline.find("/getcode") > 0):
             self.auth(self.requestline)  
         else:
-            url = RestHttpHandler.restEngine.process(self.requestline, self.command,self.headers)
+            command = self.command
+            
+            if(self.requestline.find("http_method=") > 0):
+                command = self.requestline[self.requestline.index("http_method=")+len("http_method="):]
+                if (command.find("&") > 0):
+                    command = command[:command.index("&")]
+                
+            
+            url = RestHttpHandler.restEngine.process(self.requestline,command.upper(),self.headers)
             self.getParamsFromPOSTBody()
             self.do_proxy(url) 
                 

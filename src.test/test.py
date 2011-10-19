@@ -36,6 +36,18 @@ class HttpClientDemo(object):
     
         print data
         
+    def getItemByQL(self,iid,session):
+        params = urllib.urlencode({'tql':'select post_fee,num,price,type,stuff_status,title,desc,location.state,location.city,approve_status,cid,props,freight_payer,valid_thru from item where num_iid=' + iid})
+        
+        conn = httplib.HTTPConnection("localhost",7777)
+        conn.request("GET","/tql?debug=true&format=json&v=2.0&session=" + session+"&"+params, "", HttpClientDemo.headers)
+        
+        resp = conn.getresponse()
+    
+        data = resp.read()
+    
+        print data
+        
     def updateItem(self,iid,session):
         params = urllib.urlencode({'num_iid':iid,'post_fee':'6.00'})
         
@@ -52,7 +64,8 @@ class HttpClientDemo(object):
         params = urllib.urlencode({'num_iid':iid})
        
         conn = httplib.HTTPConnection("localhost",7777)
-        conn.request("DELETE","/2.0/item.json?debug=true&session=" + session, params, HttpClientDemo.headers)
+        #conn.request("DELETE","/2.0/item.json?debug=true&session=" + session, params, HttpClientDemo.headers)
+        conn.request("POST","/2.0/item.json?http_method=delete&debug=true&session=" + session, params, HttpClientDemo.headers)
         
         resp = conn.getresponse()
     
@@ -62,7 +75,7 @@ class HttpClientDemo(object):
         
        
 def test():
-    session = "41018330b956b2e7a91f1c5ce1dda551a7d9e2a1wJ0koaPt51020661"
+    session = "41019340b956b2e7a91f1c5ce1dda551a7d9e2a15eflTqx4N1020661"
     clientDemo = HttpClientDemo()
     
     
@@ -71,7 +84,7 @@ def test():
     if (iid):
         clientDemo.getItem(iid,session)
         clientDemo.updateItem(iid,session)
-        clientDemo.getItem(iid, session)
+        clientDemo.getItemByQL(iid, session)
         clientDemo.deleteItem(iid, session)
         
     
