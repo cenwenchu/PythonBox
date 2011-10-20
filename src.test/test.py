@@ -64,8 +64,8 @@ class HttpClientDemo(object):
         params = urllib.urlencode({'num_iid':iid})
        
         conn = httplib.HTTPConnection("localhost",7777)
-        #conn.request("DELETE","/2.0/item.json?debug=true&session=" + session, params, HttpClientDemo.headers)
-        conn.request("POST","/2.0/item.json?http_method=delete&debug=true&session=" + session, params, HttpClientDemo.headers)
+        conn.request("DELETE","/2.0/item.json?debug=true&session=" + session, params, HttpClientDemo.headers)
+        #conn.request("POST","/2.0/item.json?http_method=delete&debug=true&session=" + session, params, HttpClientDemo.headers)
         
         resp = conn.getresponse()
     

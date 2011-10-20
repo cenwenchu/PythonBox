@@ -1,0 +1,24 @@
+PythonBox是一个Python初学者写的一些工具集合：
+1.dragger里面是日志拖取代理，部署在服务器上支持通过http方式远程传递本地日志文件块到外部
+2.peant是一个支持通过远程http方式传递参数，执行linux本地指令的代理。
+3.rest是一个针对淘宝开放平台非REST化的一个REST化引擎（带了一点简单的QL支持），使用方式如下：
+运行RestServer.py启动本地服务端，
+然后访问：
+https://oauth.taobao.com/authorize?response_type=code&client_id=12131536&redirect_uri=http://www.mashupshow.com/getcode&state=taobao
+获得淘宝的授权信息，如果正常会看到返回如下内容：(如果不行，直接旺旺我)
+{
+  "expires_in": 1800,
+  "token_type": "Bearer",
+  "access_token": "xxxxxxxxxxxxxxxxxxxxxxxxxx"
+}
+把access_token里面的内容拷贝到test.py和test2.py中替换session = "41018330b956b2e7a91f1c5ce1dda551a7d9e2a1wJ0koaPt51020661"，然后可以运行test.py和test2.py，
+注意如果你授权的用户是买家，那么只能跑test2.py，如果是卖家两个都可以跑。
+test里面是对商品的增删改查,test2是对于交易信息的获取，当然你在授权或者没有授权情况下还可以通过url直接获取一系列get的方法，例如：（最后一个需要改session）
+http://localhost:7777/2.0/shop.json?fields=sid,cid,title,nick,desc,bulletin,pic_path,created,modified&nick=lamant520
+http://localhost:7777/2.0/user.json?fields=uid,nick,sex,buyer_credit,seller_credit,location,last_visit,type,has_shop,vip_info&nick=lamant520
+http://localhost:7777/2.0/users.json?fields=uid,nick,sex,buyer_credit,seller_credit,location,last_visit,type,has_shop,vip_info&nicks=lamant520,cenwenchu
+http://localhost:7777/2.0/itemcats.json?fields=cid,parent_cid,name,is_parent&parent_cid=0
+http://localhost:7777/2.0/item.json?session=41019240b956b2e7a91f1c5ce1dda55Ehs0uAIc1a7d9e2a151020661&num_iid=7185491239&fields=post_fee,num,price,type,stuff_status,title,desc,location.state,location.city,approve_status,cid,props,freight_payer,valid_thru
+
+
+http://localhost:7777/tql?session=41020300b956b2e7a91f1c5ce1dda551a7d9ekbHYSrny2a151020661&tql=select%20post_fee,num,price,type,stuff_status,title,desc,location.state,location.city,approve_status,cid,props,freight_payer,valid_thru%20from%20item%20where%20num_iid=7185491239&format=json&v=2.0
